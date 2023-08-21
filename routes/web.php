@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\NoticeController;
 
 /*
@@ -14,8 +15,8 @@ use App\Http\Controllers\NoticeController;
 |
 */
 
-Route::get('/', [NoticeController::class, 'index']);
+Route::get('/', [SiteController::class, 'home']);
 
 Route::resource('notices', NoticeController::class)->only([
-    'index', 'show'
+    'index', 'create', 'store', 'edit', 'update'
 ]);

@@ -30,7 +30,13 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        //
+        $viewParameters = [];
+
+        $pageTitle = 'New Notice';
+
+        $viewParameters[] = 'pageTitle';
+
+        return view('notices.create', compact($viewParameters));
     }
 
     /**
@@ -38,7 +44,26 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'contents' => 'required',
+        ]);
+
+        $contents = $request->contents;
+        $link = $request->link;
+        $color = $request->color;
+        $isActive = $request->is_active ?? 0;
+
+        $notice = new Notice;
+        $notice->contents = $contents;
+        $notice->link = $link;
+        $notice->color = $color;
+        $notice->is_active = $isActive;
+
+        $notice->save();
+         
+        return redirect()->route('notices.create')
+                        ->with('actionHead','WoW!')
+                        ->with('actionMsg','Notice created successfully.');
     }
 
     /**
@@ -52,17 +77,42 @@ class NoticeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Notice $notice)
     {
-        //
+        $viewParameters = [];
+
+        $pageTitle = 'Edit Notice';
+
+        $viewParameters[] = 'pageTitle';
+        $viewParameters[] = 'notice';
+
+        return view('notices.edit', compact($viewParameters));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Notice $notice)
     {
-        //
+        $request->validate([
+            'contents' => 'required',
+        ]);
+
+        $contents = $request->contents;
+        $link = $request->link;
+        $color = $request->color;
+        $isActive = $request->is_active ?? 0;
+
+        $notice->contents = $contents;
+        $notice->link = $link;
+        $notice->color = $color;
+        $notice->is_active = $isActive;
+
+        $notice->update();
+         
+        return redirect()->route('notices.edit', ['notice' => $notice->id])
+                        ->with('actionHead','WoW!')
+                        ->with('actionMsg','Notice udpated successfully.');
     }
 
     /**
